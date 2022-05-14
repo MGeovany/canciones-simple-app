@@ -17,15 +17,19 @@ img {
   height: 600px;
 }
 
+.pp {
+  width: 200px;
+  height: 200px;
+  border-radius: 25%;
+}
+
 a:hover {
   text-decoration: underline;
 }
 div {
   margin-top: 20px;
 }
-hr {
-  width: 90%;
-}
+
 .button,
 a {
   text-decoration: none;

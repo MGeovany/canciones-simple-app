@@ -40,10 +40,11 @@ Enlace en GitHub 10%
 const express = require("express");
 const path = require("path");
 const canciones = require("./canciones");
+const acerca = require("./acerca");
 
-app = express();
+const app = express();
 
-PORT = 3000;
+const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`escuchando en: ${PORT}`);
@@ -58,6 +59,7 @@ app.get("/", (req, res) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/canciones", canciones);
+app.use("/acerca", acerca);
 
 app.get("*", (req, res) => {
   res.status(404).send(`<h1> Whoops! Page not found</h1>`);
