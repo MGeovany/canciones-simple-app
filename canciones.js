@@ -39,6 +39,7 @@ router.get('/canciones', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'canciones.html'))
 })
 
+// por artista
 router.get('/canciones/artist', (req, res) => {
   Song.find({ artist: req.query.artist }, (err, songs) => {
     if (err) res.status(500).send('Hubo un error en la base de datos')
@@ -50,6 +51,7 @@ router.get('/canciones/artist', (req, res) => {
   })
 })
 
+// por año
 router.get('/canciones/year', function (req, res) {
   Song.find({ year: req.query.year }, function (err, canciones) {
     if (err) {
@@ -59,6 +61,7 @@ router.get('/canciones/year', function (req, res) {
   })
 })
 
+// entre dos años
 router.get('/canciones/yearx', function (req, res) {
   Song.find({ year: { $gt: req.query.gtyear, $lte: req.query.ltyear } }, function (err, canciones) {
     if (err) {
@@ -68,6 +71,7 @@ router.get('/canciones/yearx', function (req, res) {
   })
 })
 
+// por id
 router.get('/canciones/:id', function (req, res) {
   Song.findById(req.params.id, function (err, cancion) {
     if (err) res.status(500).send('Error en la base de datos ')
