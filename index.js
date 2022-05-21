@@ -1,66 +1,64 @@
 /*
-Indicaciones:
 
-Para realizar esta tarea, es necesario revisar los recursos de semana 2, especialmente los 6 ejemplos de Express. Además, acceder a la documentación de Express.
+ -> Objetivo: Crear una API REST usando Node, Express y Mongo.
+ -> Instrucciones: Crear una API REST para una tienda de música en línea que tenga los siguientes elementos:
+ -> Un modelo para una base de datos de Música con los siguientes campos:
 
-/1. Crear una aplicación usando Node, Express y Bootstrap que contenga las siguientes rutas:
+    => Canción
+    => Artista
+    => Álbum
+    => Año
+    => País
 
-/2. Ruta / la cual enviará al cliente una página HTML de bienvenida con el título "Mis canciones" y una foto de un artista.
+  Consultar todas las canciones
+  Consultar una canción por ID
+  Consulta de canciones por nombre de artista
+  Consulta de canciones que sean del año X o más reciente
+  Consulta de canciones que estén entre dos años (desde – hasta)
+  Crear una nueva canción en la base de datos
+  Modificar la información de una canción por su ID
+  Eliminar una canción por su ID (o deshabilitarla para que ya no aparezca en los resultados)
+  Todos los nuevos registros de la base de datos deben tener un ID autogenerado.
+  Todas esas rutas deberán ir en /api/canciones. Aplicar conceptos de rutas en REST.
 
-/3. Ruta /canciones que tendrá lo siguiente métodos:
+  -> Además, utilizará un Router y separará en dos archivos las siguientes rutas:
+     - Inicio (index)
+     - Canciones
 
--/ GET: al recibir una solicitud de este tipo, enviará una página html con una lista de 5 canciones en forma de tabla. Cada canción tendrá un hipervínculo al que al darle clic deberá permitir al usuario descargar la canción (puede utilizar cualquier archivo simbólicamente)
+  -> La ruta de Inicio mostrará un mensaje de bienvenida.
+  -> La ruta de Canciones debe enviar un HTML (página) con una lista de 5 artistas con enlaces, y al darles clic, hará una solicitud GET al API y mostrará las canciones de ese artista específico en formato JSON.
+  -> Si el usuario ingresa una ruta que no existe, debe aparecer un mensaje “Esta página no existe”.
+  -> La base de datos se manejará de manera remota y deberá crearla en MongoAtlas.
+  -> El proyecto debe crearse con Node.js, Express y Mongo.
+  -> El proyecto puede ser subido a un repositorio de Github y subir aquí el enlace. En ningun caso deberá adjuntar la carpeta node_modules.
 
--/ POST: al recicibir una solicitud de este tipo, debe regresar el mensaje "Respuesta a POST".
-
--/ PUT: al recicibir una solicitud de este tipo, debe regresar el mensaje "Respuesta a PUT".
-
--/ DELETE: al recicibir una solicitud de este tipo, debe regresar el mensaje "Respuesta a DELETE".
-
-Todas estos métodos de ruta de /canciones deben estar en un solo archivo llamado canciones.js. Para ello debe utilizar express.Router(). El resto de rutas deben quedar en server.js.
-
-Además, será necesario tener otro método de ruta /canciones/descarga para la descarga de los archivos. Utilice req.query (querystring) para que sea un solo método y funcione para descargar cualquier canción.
-
-4. Ruta /acerca que mostrará otra página html con información de autor (nombre, carrera, número de cuenta y una descripción de la página).
-
-5. En caso de que el cliente solicite otra ruta, deberá devolver una respuesta 404 de que la página solicitada no existe.
-
-6. Subir el proyecto sin la carpeta node_modules en github.com y compartir el enlace solo a su profesor.
-
-7. Enviar la URL de su repositorio en Blackboard.
-
-Ponderación:
-
-Estructura de Rutas 30%
-Descarga de archivos 30%
-Páginas HTML 30%
-Enlace en GitHub 10%
 */
 
-const express = require("express");
-const path = require("path");
-const canciones = require("./canciones");
-const acerca = require("./acerca");
+const express = require('express')
+const path = require('path')
+const canciones = require('./canciones')
+const acerca = require('./acerca')
+const artista = require('./artista')
 
-const app = express();
+const bodyParser = require('body-parser')
 
-const PORT = 3000;
+const app = express()
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+const PORT = 3000
 
 app.listen(PORT, () => {
-  console.log(`escuchando en: ${PORT}`);
-});
+  console.log(`escuchando en: ${PORT}`)
+})
 
-/* 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-*/
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use('/api', canciones)
+app.use('/api', acerca)
+app.use('/api', artista)
 
-app.use("/canciones", canciones);
-app.use("/acerca", acerca);
-
-app.get("*", (req, res) => {
-  res.status(404).send(`<h1> Whoops! Page not found</h1>`);
-});
+app.get('*', (req, res) => {
+  res.status(404).send('<h1> Whoops! Page not found</h1>')
+})
