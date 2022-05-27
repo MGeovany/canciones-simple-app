@@ -30,7 +30,7 @@ const Song = mongoose.model('Song', songSchema)
 router.get('/canciones/all', (req, res) => {
   // eslint-disable-next-line array-callback-return
   Song.find((err, songs) => {
-    if (err) res.status(500).send('Error en la base de datos')
+    if (err) res.status(500).send('Error en la base de datos (all)')
     else res.status(200).json(songs)
   })
 })
@@ -42,7 +42,7 @@ router.get('/canciones', (req, res) => {
 // por artista
 router.get('/canciones/artist', (req, res) => {
   Song.find({ artist: req.query.artist }, (err, songs) => {
-    if (err) res.status(500).send('Hubo un error en la base de datos')
+    if (err) res.status(500).send('Hubo un error en la base de datos (artist)')
     else {
       if (songs != null) {
         res.status(200).json(songs)
@@ -72,9 +72,9 @@ router.get('/canciones/yearx', function (req, res) {
 })
 
 // por id
-router.get('/canciones/:id', function (req, res) {
+router.get('/canciones/porid/:id', function (req, res) {
   Song.findById(req.params.id, function (err, cancion) {
-    if (err) res.status(500).send('Error en la base de datos ')
+    if (err) res.status(500).send('Error en la base de datos (id) ')
     else {
       if (cancion != null) {
         res.status(200).json(cancion)
@@ -83,19 +83,7 @@ router.get('/canciones/:id', function (req, res) {
   })
 })
 
-router.post((req, res) => {
-  res.send('Respuesta a POST')
-})
-
-router.put((req, res) => {
-  res.send('Respuesta a PUT')
-})
-
-router.delete((req, res) => {
-  res.send('Respuesta a DELETE')
-})
-
-router.get('/descarga', (req, res) => {
+router.get('/canciones/descarga', (req, res) => {
   const archivo = req.query
   console.log('req ', archivo.archivo)
 
